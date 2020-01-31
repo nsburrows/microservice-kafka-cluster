@@ -96,7 +96,7 @@ services:
           - node.hostname==kafka-broker-1
     restart: on-failure
     environment:
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker1:9092
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://broker1:19092,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9092
       KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181
       KAFKA_BROKER_ID: 0
       KAFKA_HEAP_OPTS: -Xms512M -Xmx1G
@@ -120,7 +120,7 @@ services:
           - node.hostname==kafka-broker-2
     restart: on-failure
     environment:
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker2:9093
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://broker2:19093,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9093
       KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181
       KAFKA_BROKER_ID: 1
       KAFKA_HEAP_OPTS: -Xms512M -Xmx1G
@@ -144,7 +144,7 @@ services:
           - node.hostname==kafka-broker-3
     restart: on-failure
     environment:
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker3:9094
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://broker3:19094,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9094
       KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181
       KAFKA_BROKER_ID: 2
       KAFKA_HEAP_OPTS: -Xms512M -Xmx1G
