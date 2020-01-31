@@ -3,6 +3,7 @@ version: "3"
 services:
   zookeeper-1:
     image: zookeeper:3.4.9
+    hostname: zookeeper-1
     deploy:
       placement:
         constraints:
@@ -19,6 +20,7 @@ services:
 
   zookeeper-2:
     image: zookeeper:3.4.9
+    hostname: zookeeper-2
     deploy:
       placement:
         constraints:
@@ -35,6 +37,7 @@ services:
 
   zookeeper-3:
     image: zookeeper:3.4.9
+    hostname: zookeeper-3
     deploy:
       placement:
         constraints:
@@ -51,6 +54,7 @@ services:
 
   kafka-broker-1:
     image: confluentinc/cp-kafka:5.3.1
+    hostname: kafka-broker-1
     depends_on:
       - zookeeper-1
       - zookeeper-2
@@ -70,6 +74,7 @@ services:
 
   kafka-broker-2:
     image: confluentinc/cp-kafka:5.3.1
+    hostname: kafka-broker-2
     depends_on:
       - zookeeper-1
       - zookeeper-2
@@ -89,6 +94,7 @@ services:
 
   kafka-broker-3:
     image: confluentinc/cp-kafka:5.3.1
+    hostname: kafka-broker-3
     depends_on:
       - zookeeper-1
       - zookeeper-2
