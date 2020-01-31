@@ -1,4 +1,4 @@
-version: "3"
+version: "3.4"
 
 services:
   zoo1:
@@ -15,17 +15,14 @@ services:
       ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888 # A list of all the zookeeper nodes in the cluster
       ZOOKEEPER_CLIENT_PORT: 2181
     ports:
-      # Zookeeper listner
       - target: 2181
         published: 2181
         protocol: tcp
         mode: host
-      # Quorum listening port
       - target: 3888
         published: 3888
         protocol: tcp
         mode: host
-      # Quorum listening port
       - target: 2888
         published: 2888
         protocol: tcp
@@ -45,17 +42,14 @@ services:
       ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888 # A list of all the zookeeper nodes in the cluster
       ZOOKEEPER_CLIENT_PORT: 2182
     ports:
-      # Zookeeper listner
       - target: 2182
         published: 2182
         protocol: tcp
         mode: host
-      # Quorum listening port
       - target: 3888
         published: 3888
         protocol: tcp
         mode: host
-      # Quorum listening port
       - target: 2888
         published: 2888
         protocol: tcp
@@ -75,17 +69,14 @@ services:
       ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888 # A list of all the zookeeper nodes in the cluster
       ZOOKEEPER_CLIENT_PORT: 2183
     ports:
-      # Zookeeper listner
       - target: 2183
         published: 2183
         protocol: tcp
         mode: host
-      # Quorum listening port
       - target: 3888
         published: 3888
         protocol: tcp
         mode: host
-      # Quorum listening port
       - target: 2888
         published: 2888
         protocol: tcp
@@ -110,7 +101,6 @@ services:
       KAFKA_BROKER_ID: 0
       KAFKA_HEAP_OPTS: -Xms512M -Xmx1G
     ports:
-      # Broker listner
       - target: 9092
         published: 9092
         protocol: tcp
@@ -135,7 +125,6 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_HEAP_OPTS: -Xms512M -Xmx1G
     ports:
-      # Broker listner
       - target: 9093
         published: 9093
         protocol: tcp
@@ -160,7 +149,6 @@ services:
       KAFKA_BROKER_ID: 2
       KAFKA_HEAP_OPTS: -Xms512M -Xmx1G
     ports:
-      # Broker listner
       - target: 9094
         published: 9094
         protocol: tcp
