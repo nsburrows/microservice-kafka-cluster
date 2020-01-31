@@ -1,105 +1,105 @@
 version: "3"
-  services:
-    zookeeper-1:
-      image: zookeeper:3.4.9
-      deploy:
-        mode: global
-      restart: on-failure
-      environment:
-        ZOO_MY_ID: 1 # The id for the zookeeper in the cluster
-        ZOO_SERVERS: server.1=0.0.0.0:2888:3888 server.2=zookeeper-2:2888:3888 server.3=zookeeper-3:2888:3888 # A list of all the zookeeper nodes in the cluster
-        ZOOKEEPER_CLIENT_PORT: 2181
-      ports:
-        - 2181:2181 # Zookeeper listner
-        - 3888:3888 # Quorum listening port
-        - 2888:2888 # Quorum listening port
 
-    zookeeper-2:
-      image: zookeeper:3.4.9
-      deploy:
-        mode: global
-      restart: on-failure
-      environment:
-        ZOO_MY_ID: 2 # The id for the zookeeper in the cluster
-        ZOO_SERVERS: server.1=zookeeper-1:2888:3888 server.2=0.0.0.0:2888:3888 server.3=zookeeper-3:2888:3888 # A list of all the zookeeper nodes in the cluster
-        ZOOKEEPER_CLIENT_PORT: 2181
-      ports:
-        - 2181:2181 # Zookeeper listner
-        - 3888:3888 # Quorum listening port
-        - 2888:2888 # Quorum listening port
+services:
+  zookeeper-1:
+    image: zookeeper:3.4.9
+    deploy:
+      mode: global
+    restart: on-failure
+    environment:
+      ZOO_MY_ID: 1 # The id for the zookeeper in the cluster
+      ZOO_SERVERS: server.1=0.0.0.0:2888:3888 server.2=zookeeper-2:2888:3888 server.3=zookeeper-3:2888:3888 # A list of all the zookeeper nodes in the cluster
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - 2181:2181 # Zookeeper listner
+      - 3888:3888 # Quorum listening port
+      - 2888:2888 # Quorum listening port
 
-    zookeeper-3:
-      image: zookeeper:3.4.9
-      deploy:
-        mode: global
-      restart: on-failure
-      environment:
-        ZOO_MY_ID: 3 # The id for the zookeeper in the cluster
-        ZOO_SERVERS: server.1=zookeeper-1:2888:3888 server.2=zookeeper-2:2888:3888 server.3=0.0.0.0:2888:3888 # A list of all the zookeeper nodes in the cluster
-        ZOOKEEPER_CLIENT_PORT: 2181
-      ports:
-        - 2181:2181 # Zookeeper listner
-        - 3888:3888 # Quorum listening port
-        - 2888:2888 # Quorum listening port
+  zookeeper-2:
+    image: zookeeper:3.4.9
+    deploy:
+      mode: global
+    restart: on-failure
+    environment:
+      ZOO_MY_ID: 2 # The id for the zookeeper in the cluster
+      ZOO_SERVERS: server.1=zookeeper-1:2888:3888 server.2=0.0.0.0:2888:3888 server.3=zookeeper-3:2888:3888 # A list of all the zookeeper nodes in the cluster
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - 2181:2181 # Zookeeper listner
+      - 3888:3888 # Quorum listening port
+      - 2888:2888 # Quorum listening port
 
-    kafka-broker-1:
-      image: confluentinc/cp-kafka:5.3.1
-      depends_on:
-        - zookeeper-1
-        - zookeeper-2
-        - zookeeper-3
-      deploy:
-        mode: global
-      restart: on-failure
-      environment:
-        KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker-1:9092
-        KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:2181,zookeeper-2:2181,zookeeper-3:2181
-        KAFKA_BROKER_ID: 0
-        KAFKA_HEAP_OPTS: -Xms512M -Xmx1G
-        ZOOKEEPER_CLIENT_PORT: 2181
-      ports:
-        - 2181:2181 # Zookeeper listner
-        - 3888:3888 # Quorum listening port
-        - 2888:2888 # Quorum listening port
+  zookeeper-3:
+    image: zookeeper:3.4.9
+    deploy:
+      mode: global
+    restart: on-failure
+    environment:
+      ZOO_MY_ID: 3 # The id for the zookeeper in the cluster
+      ZOO_SERVERS: server.1=zookeeper-1:2888:3888 server.2=zookeeper-2:2888:3888 server.3=0.0.0.0:2888:3888 # A list of all the zookeeper nodes in the cluster
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - 2181:2181 # Zookeeper listner
+      - 3888:3888 # Quorum listening port
+      - 2888:2888 # Quorum listening port
 
-    kafka-broker-2:
-      image: confluentinc/cp-kafka:5.3.1
-      depends_on:
-        - zookeeper-1
-        - zookeeper-2
-        - zookeeper-3
-      deploy:
-        mode: global
-      restart: on-failure
-      environment:
-        KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker-2:9092
-        KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:2181,zookeeper-2:2181,zookeeper-3:2181
-        KAFKA_BROKER_ID: 1
-        KAFKA_HEAP_OPTS: -Xms512M -Xmx1G
-        ZOOKEEPER_CLIENT_PORT: 2181
-      ports:
-        - 2181:2181 # Zookeeper listner
-        - 3888:3888 # Quorum listening port
-        - 2888:2888 # Quorum listening port
+  kafka-broker-1:
+    image: confluentinc/cp-kafka:5.3.1
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+      - zookeeper-3
+    deploy:
+      mode: global
+    restart: on-failure
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker-1:9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:2181,zookeeper-2:2181,zookeeper-3:2181
+      KAFKA_BROKER_ID: 0
+      KAFKA_HEAP_OPTS: -Xms512M -Xmx1G
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - 2181:2181 # Zookeeper listner
+      - 3888:3888 # Quorum listening port
+      - 2888:2888 # Quorum listening port
 
-    kafka-broker-3:
-      image: confluentinc/cp-kafka:5.3.1
-      depends_on:
-        - zookeeper-1
-        - zookeeper-2
-        - zookeeper-3
-      deploy:
-        mode: global
-      restart: on-failure
-      environment:
-        KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker-3:9092
-        KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:2181,zookeeper-2:2181,zookeeper-3:2181
-        KAFKA_BROKER_ID: 2
-        KAFKA_HEAP_OPTS: -Xms512M -Xmx1G
-        ZOOKEEPER_CLIENT_PORT: 2181
-      ports:
-        - 2181:2181 # Zookeeper listner
-        - 3888:3888 # Quorum listening port
-        - 2888:2888 # Quorum listening port
+  kafka-broker-2:
+    image: confluentinc/cp-kafka:5.3.1
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+      - zookeeper-3
+    deploy:
+      mode: global
+    restart: on-failure
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker-2:9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:2181,zookeeper-2:2181,zookeeper-3:2181
+      KAFKA_BROKER_ID: 1
+      KAFKA_HEAP_OPTS: -Xms512M -Xmx1G
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - 2181:2181 # Zookeeper listner
+      - 3888:3888 # Quorum listening port
+      - 2888:2888 # Quorum listening port
 
+  kafka-broker-3:
+    image: confluentinc/cp-kafka:5.3.1
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+      - zookeeper-3
+    deploy:
+      mode: global
+    restart: on-failure
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker-3:9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:2181,zookeeper-2:2181,zookeeper-3:2181
+      KAFKA_BROKER_ID: 2
+      KAFKA_HEAP_OPTS: -Xms512M -Xmx1G
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - 2181:2181 # Zookeeper listner
+      - 3888:3888 # Quorum listening port
+      - 2888:2888 # Quorum listening port
 
