@@ -59,9 +59,7 @@ services:
       KAFKA_HEAP_OPTS: -Xms512M -Xmx1G
       ZOOKEEPER_CLIENT_PORT: 2181
     ports:
-      - 2181:2181 # Zookeeper listner
-      - 3888:3888 # Quorum listening port
-      - 2888:2888 # Quorum listening port
+      - 9092:9092 # Broker listner
 
   kafka-broker-2:
     image: confluentinc/cp-kafka:5.3.1
@@ -79,9 +77,7 @@ services:
       KAFKA_HEAP_OPTS: -Xms512M -Xmx1G
       ZOOKEEPER_CLIENT_PORT: 2181
     ports:
-      - 2181:2181 # Zookeeper listner
-      - 3888:3888 # Quorum listening port
-      - 2888:2888 # Quorum listening port
+      - 9092:9092 # Broker listner
 
   kafka-broker-3:
     image: confluentinc/cp-kafka:5.3.1
@@ -99,7 +95,5 @@ services:
       KAFKA_HEAP_OPTS: -Xms512M -Xmx1G
       ZOOKEEPER_CLIENT_PORT: 2181
     ports:
-      - 2181:2181 # Zookeeper listner
-      - 3888:3888 # Quorum listening port
-      - 2888:2888 # Quorum listening port
+      - 9092:9092 # Broker listner
 
