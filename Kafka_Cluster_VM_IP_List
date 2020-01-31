@@ -36,3 +36,9 @@ docker-swarm-master: 192.168.64.16
 ==================================
 
 sudo docker swarm join --token SWMTKN-1-15wvznylzoshus9n13a9jn6mv93pr951jjtz7sgr27lewoo1ea-17e6odz7jr9uz3o0ovmpweumg 192.168.64.16:2377
+
+# Start the cluster
+sudo docker stack deploy --compose-file kafka-cluster-stack.yml kafkacluster
+
+# Stop the cluster
+sudo docker stack rm  kafkacluster

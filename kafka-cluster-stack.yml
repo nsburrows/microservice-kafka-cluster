@@ -96,7 +96,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname==kafka-broker-2
+          - node.hostname==kafka-broker-3
     restart: on-failure
     environment:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker-3:9094
