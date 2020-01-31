@@ -3,67 +3,103 @@ version: "3"
 services:
   zoo1:
     image: zookeeper:3.4.9
-    mode: host
     hostname: zoo1
     deploy:
+      replicas: 1
       placement:
         constraints:
           - node.hostname==kafka-zookeeper-1
     restart: on-failure
     environment:
       ZOO_MY_ID: 1 # The id for the zookeeper in the cluster
-      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2889:3889 server.3=zoo3:2890:3890 # A list of all the zookeeper nodes in the cluster
+      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888 # A list of all the zookeeper nodes in the cluster
       ZOOKEEPER_CLIENT_PORT: 2181
     ports:
-      - "2181:2181" # Zookeeper listner
-      - "3888:3888" # Quorum listening port
-      - "2888:2888" # Quorum listening port
+      # Zookeeper listner
+      - target: 2181
+        published: 2181
+        protocol: tcp
+        mode: host
+      # Quorum listening port
+      - target: 3888
+        published: 3888
+        protocol: tcp
+        mode: host
+      # Quorum listening port
+      - target: 2888
+        published: 2888
+        protocol: tcp
+        mode: host
 
   zoo2:
     image: zookeeper:3.4.9
-    mode: host
     hostname: zoo2
     deploy:
+      replicas: 1
       placement:
         constraints:
           - node.hostname==kafka-zookeeper-2
     restart: on-failure
     environment:
       ZOO_MY_ID: 2 # The id for the zookeeper in the cluster
-      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2889:3889 server.3=zoo3:2890:3890 # A list of all the zookeeper nodes in the cluster
+      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888 # A list of all the zookeeper nodes in the cluster
       ZOOKEEPER_CLIENT_PORT: 2182
     ports:
-      - "2182:2182" # Zookeeper listner
-      - "3889:3889" # Quorum listening port
-      - "2889:2889" # Quorum listening port
+      # Zookeeper listner
+      - target: 2182
+        published: 2182
+        protocol: tcp
+        mode: host
+      # Quorum listening port
+      - target: 3888
+        published: 3888
+        protocol: tcp
+        mode: host
+      # Quorum listening port
+      - target: 2888
+        published: 2888
+        protocol: tcp
+        mode: host
 
   zoo3:
     image: zookeeper:3.4.9
-    mode: host
     hostname: zoo3
     deploy:
+      replicas: 1
       placement:
         constraints:
           - node.hostname==kafka-zookeeper-3
     restart: on-failure
     environment:
       ZOO_MY_ID: 3 # The id for the zookeeper in the cluster
-      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2889:3889 server.3=zoo3:2890:3890 # A list of all the zookeeper nodes in the cluster
+      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888 # A list of all the zookeeper nodes in the cluster
       ZOOKEEPER_CLIENT_PORT: 2183
     ports:
-      - "2183:2183" # Zookeeper listner
-      - "3890:3890" # Quorum listening port
-      - "2890:2890" # Quorum listening port
+      # Zookeeper listner
+      - target: 2183
+        published: 2183
+        protocol: tcp
+        mode: host
+      # Quorum listening port
+      - target: 3888
+        published: 3888
+        protocol: tcp
+        mode: host
+      # Quorum listening port
+      - target: 2888
+        published: 2888
+        protocol: tcp
+        mode: host
 
   broker1:
     image: confluentinc/cp-kafka:5.3.1
-    mode: host
     hostname: broker1
     depends_on:
       - zoo1
       - zoo2
       - zoo3
     deploy:
+      replicas: 1
       placement:
         constraints:
           - node.hostname==kafka-broker-1
@@ -74,17 +110,21 @@ services:
       KAFKA_BROKER_ID: 0
       KAFKA_HEAP_OPTS: -Xms512M -Xmx1G
     ports:
-      - "9092:9092" # Broker listner
+      # Broker listner
+      - target: 9092
+        published: 9092
+        protocol: tcp
+        mode: host
 
   broker2:
     image: confluentinc/cp-kafka:5.3.1
-    mode: host
     hostname: broker2
     depends_on:
       - zoo1
       - zoo2
       - zoo3
     deploy:
+      replicas: 1
       placement:
         constraints:
           - node.hostname==kafka-broker-2
@@ -95,17 +135,21 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_HEAP_OPTS: -Xms512M -Xmx1G
     ports:
-      - "9093:9093" # Broker listner
+      # Broker listner
+      - target: 9093
+        published: 9093
+        protocol: tcp
+        mode: host
 
   broker3:
     image: confluentinc/cp-kafka:5.3.1
-    mode: host
     hostname: broker3
     depends_on:
       - zoo1
       - zoo2
       - zoo3
     deploy:
+      replicas: 1
       placement:
         constraints:
           - node.hostname==kafka-broker-3
@@ -116,5 +160,8 @@ services:
       KAFKA_BROKER_ID: 2
       KAFKA_HEAP_OPTS: -Xms512M -Xmx1G
     ports:
-      - "9094:9094" # Broker listner
-
+      # Broker listner
+      - target: 9094
+        published: 9094
+        protocol: tcp
+        mode: host
