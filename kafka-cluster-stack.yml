@@ -4,7 +4,9 @@ services:
   zookeeper-1:
     image: zookeeper:3.4.9
     deploy:
-      mode: global
+      placement:
+        constraints:
+          - node.hostname == 192.168.64.8
     restart: on-failure
     environment:
       ZOO_MY_ID: 1 # The id for the zookeeper in the cluster
@@ -18,7 +20,9 @@ services:
   zookeeper-2:
     image: zookeeper:3.4.9
     deploy:
-      mode: global
+      placement:
+        constraints:
+          - node.hostname == 192.168.64.9
     restart: on-failure
     environment:
       ZOO_MY_ID: 2 # The id for the zookeeper in the cluster
@@ -32,7 +36,9 @@ services:
   zookeeper-3:
     image: zookeeper:3.4.9
     deploy:
-      mode: global
+      placement:
+        constraints:
+          - node.hostname == 192.168.64.10
     restart: on-failure
     environment:
       ZOO_MY_ID: 3 # The id for the zookeeper in the cluster
@@ -50,7 +56,9 @@ services:
       - zookeeper-2
       - zookeeper-3
     deploy:
-      mode: global
+      placement:
+        constraints:
+          - node.hostname == 192.168.64.5
     restart: on-failure
     environment:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker-1:9092
@@ -68,7 +76,9 @@ services:
       - zookeeper-2
       - zookeeper-3
     deploy:
-      mode: global
+      placement:
+        constraints:
+          - node.hostname == 192.168.64.6
     restart: on-failure
     environment:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker-2:9092
@@ -86,7 +96,9 @@ services:
       - zookeeper-2
       - zookeeper-3
     deploy:
-      mode: global
+      placement:
+        constraints:
+          - node.hostname == 192.168.64.7
     restart: on-failure
     environment:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker-3:9092
