@@ -10,7 +10,7 @@ services:
     restart: on-failure
     environment:
       ZOO_MY_ID: 1 # The id for the zookeeper in the cluster
-      ZOO_SERVERS: server.1=0.0.0.0:2888:3888 server.2=zookeeper-2:2889:3889 server.3=zookeeper-3:2890:3890 # A list of all the zookeeper nodes in the cluster
+      ZOO_SERVERS: server.1=zookeeper-1:2888:3888 server.2=zookeeper-2:2889:3889 server.3=zookeeper-3:2890:3890 # A list of all the zookeeper nodes in the cluster
       ZOOKEEPER_CLIENT_PORT: 2181
     ports:
       - 2181:2181 # Zookeeper listner
@@ -26,7 +26,7 @@ services:
     restart: on-failure
     environment:
       ZOO_MY_ID: 2 # The id for the zookeeper in the cluster
-      ZOO_SERVERS: server.1=zookeeper-1:2888:3888 server.2=0.0.0.0:2889:3889 server.3=zookeeper-3:2890:3890 # A list of all the zookeeper nodes in the cluster
+      ZOO_SERVERS: server.1=zookeeper-1:2888:3888 server.2=zookeeper-2:2889:3889 server.3=zookeeper-3:2890:3890 # A list of all the zookeeper nodes in the cluster
       ZOOKEEPER_CLIENT_PORT: 2182
     ports:
       - 2182:2182 # Zookeeper listner
@@ -42,7 +42,7 @@ services:
     restart: on-failure
     environment:
       ZOO_MY_ID: 3 # The id for the zookeeper in the cluster
-      ZOO_SERVERS: server.1=zookeeper-1:2888:3888 server.2=zookeeper-2:2889:3889 server.3=0.0.0.0:2890:3890 # A list of all the zookeeper nodes in the cluster
+      ZOO_SERVERS: server.1=zookeeper-1:2888:3888 server.2=zookeeper-2:2889:3889 server.3=zookeeper-3:2890:3890 # A list of all the zookeeper nodes in the cluster
       ZOOKEEPER_CLIENT_PORT: 2183
     ports:
       - 2183:2183 # Zookeeper listner

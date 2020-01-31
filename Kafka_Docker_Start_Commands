@@ -37,7 +37,7 @@ zookeeper:3.4.9
 Broker 1
 =====================================================================================================================
 sudo docker run --name kafka-broker-1 \
---restart "on-failure" \
+--rm \
 -p 9092:9092 \
 -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.64.5:9092 \
 -e KAFKA_ZOOKEEPER_CONNECT="192.168.64.8:2181,192.168.64.9:2181,192.168.64.10:2181" \
@@ -126,7 +126,7 @@ confluentinc/cp-schema-registry:5.4.0
 Kafka Rest Proxy
 ======================================================================================================
 sudo docker run \
---restart "on-failure" \
+--rm \
 --net=host \
 --name=kafka-rest-proxy \
 -e KAFKA_REST_ZOOKEEPER_CONNECT="192.168.64.8:2181,192.168.64.9:2181,192.168.64.10:2181" \
