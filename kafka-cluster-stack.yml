@@ -15,7 +15,7 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
     ports:
       - "2181-2183:2181-2183" # Zookeeper listner
-      - "3888-3890:38883890" # Quorum listening port
+      - "3888-3890:3888-3890" # Quorum listening port
       - "2888-2890:2888-2890" # Quorum listening port
 
   zoo2:
