@@ -40,10 +40,10 @@ services:
     environment:
       ZOO_MY_ID: 2 # The id for the zookeeper in the cluster
       ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888 # A list of all the zookeeper nodes in the cluster
-      ZOOKEEPER_CLIENT_PORT: 2182
+      ZOOKEEPER_CLIENT_PORT: 2181
     ports:
-      - target: 2182
-        published: 2182
+      - target: 2181
+        published: 2181
         protocol: tcp
         mode: host
       - target: 3888
@@ -67,10 +67,10 @@ services:
     environment:
       ZOO_MY_ID: 3 # The id for the zookeeper in the cluster
       ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888 # A list of all the zookeeper nodes in the cluster
-      ZOOKEEPER_CLIENT_PORT: 2183
+      ZOOKEEPER_CLIENT_PORT: 2181
     ports:
-      - target: 2183
-        published: 2183
+      - target: 2181
+        published: 2181
         protocol: tcp
         mode: host
       - target: 3888
@@ -97,7 +97,7 @@ services:
     restart: on-failure
     environment:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker1:9092
-      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2182,zoo3:2183
+      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181
       KAFKA_BROKER_ID: 0
       KAFKA_HEAP_OPTS: -Xms512M -Xmx1G
     ports:
@@ -121,7 +121,7 @@ services:
     restart: on-failure
     environment:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker2:9093
-      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2182,zoo3:2183
+      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181
       KAFKA_BROKER_ID: 1
       KAFKA_HEAP_OPTS: -Xms512M -Xmx1G
     ports:
@@ -145,7 +145,7 @@ services:
     restart: on-failure
     environment:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker3:9094
-      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2182,zoo3:2183
+      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181
       KAFKA_BROKER_ID: 2
       KAFKA_HEAP_OPTS: -Xms512M -Xmx1G
     ports:
