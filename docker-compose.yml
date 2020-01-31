@@ -1,0 +1,39 @@
+version: "2"
+
+services:
+  # this is our kafka cluster.
+  kafka-cluster:
+    #image: landoop/fast-data-dev:cp3.3.0
+    image: nburrows/kafka:1.1
+    environment:
+      ADV_HOST: 127.0.0.1 # Change to 192.168.99.100 if using Docker Toolbox
+      RUNTESTS: 0 # Disable Running tests so the cluster starts faster
+    ports:
+      - 2181:2181 # Zookeeper
+      - 3030:3030 # Landoop UI
+      - 8081-8083:8081-8083 # REST Proxy, Schema Registry, Kafka Connect ports
+      - 9581-9585:9581-9585 # JMX Ports
+      - 9092:9092 # Kafka Broker
+    volumes:
+      - "/Users/nigelburrows/ojdbc8.jar:/extra-connect-jars/ojdbc8.jar"
+      - "/Users/nigelburrows/mysql-connector-java-8.0.19.jar:/extra-connect-jars/mysql-connector-java-8.0.19.jar"
+      - "/Users/nigelburrows/Downloads/debezium-connector-mysql:/opt/connectors/debezium-connector-mysql"
+
+      - "/Users/nigelburrows/ojdbc8.jar:/opt/confluent-3.3.0/share/java/kafka-connect-jdbc/ojdbc8.jar"
+      - "/Users/nigelburrows/mysql-connector-java-8.0.19.jar:/opt/confluent-3.3.0/share/java/kafka-connect-jdbc/mysql-connector-java-8.0.19.jar"
+
+      - "/Users/nigelburrows/ojdbc8.jar:/opt/confluent/share/java/kafka-connect-jdbc/ojdbc8.jar"
+      - "/Users/nigelburrows/mysql-connector-java-8.0.19.jar:/opt/confluent/share/java/kafka-connect-jdbc/mysql-connector-java-8.0.19.jar"
+
+    links: [mysql:mysql, elasticsearch:elasticsearch, postgres:postgres]
+
+    # Standlone database that is configured to be ran with debeizum
+  mysql:
+    image: debezium/example-mysql:latest
+    environment:
+      ADV_HOST: 127.0.0.1
+      MYSQL_ROOT_PASSWORD: debezium
+      MYSQL_USER: mysqluser
+      MYSQL_PASSWORD: mysqlpw
+    ports:
+      - 3306:3306

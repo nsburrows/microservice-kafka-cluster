@@ -1,0 +1,136 @@
+Zookeeper 1
+=====================================================================================================================
+sudo docker run --name zookeeper-1 \
+--restart "on-failure" \
+-p 2181:2181 \
+-p 3888:3888 \
+-p 2888:2888 \
+-e ZOO_MY_ID=1 \
+-e ZOO_SERVERS="server.1=0.0.0.0:2888:3888 server.2=192.168.64.9:2888:3888 server.3=192.168.64.10:2888:3888" \
+-e ZOOKEEPER_CLIENT_PORT=2181 \
+zookeeper:3.4.9
+
+Zookeeper 2
+=====================================================================================================================
+sudo docker run --name zookeeper-2 \
+--restart "on-failure" \
+-p 2181:2181 \
+-p 3888:3888 \
+-p 2888:2888 \
+-e ZOO_MY_ID=2 \
+-e ZOO_SERVERS="server.1=192.168.64.8:2888:3888 server.2=0.0.0.0:2888:3888 server.3=192.168.64.10:2888:3888" \
+-e ZOOKEEPER_CLIENT_PORT=2181 \
+zookeeper:3.4.9
+
+Zookeeper 3
+=====================================================================================================================
+sudo docker run --name zookeeper-3 \
+--restart "on-failure" \
+-p 2181:2181 \
+-p 3888:3888 \
+-p 2888:2888 \
+-e ZOO_MY_ID=3 \
+-e ZOO_SERVERS="server.1=192.168.64.8:2888:3888 server.2=192.168.64.9:2888:3888 server.3=0.0.0.0:2888:3888" \
+-e ZOOKEEPER_CLIENT_PORT=2181 \
+zookeeper:3.4.9
+
+Broker 1
+=====================================================================================================================
+sudo docker run --name kafka-broker-1 \
+--restart "on-failure" \
+-p 9092:9092 \
+-e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.64.5:9092 \
+-e KAFKA_ZOOKEEPER_CONNECT="192.168.64.8:2181,192.168.64.9:2181,192.168.64.10:2181" \
+-e KAFKA_BROKER_ID=0 \
+-e KAFKA_HEAP_OPTS="-Xms512M -Xmx1G" \
+confluentinc/cp-kafka:5.3.1
+
+Broker 2
+=====================================================================================================================
+sudo docker run --name kafka-broker-2 \
+--restart "on-failure" \
+-p 9093:9093 \
+-e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.64.6:9093 \
+-e KAFKA_ZOOKEEPER_CONNECT="192.168.64.8:2181,192.168.64.9:2181,192.168.64.10:2181" \
+-e KAFKA_BROKER_ID=1 \
+-e KAFKA_HEAP_OPTS="-Xms512M -Xmx1G" \
+confluentinc/cp-kafka:5.3.1
+
+Broker 3
+=====================================================================================================================
+sudo docker run --name kafka-broker-3 \
+--restart "on-failure" \
+-p 9094:9094 \
+-e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.64.7:9094 \
+-e KAFKA_ZOOKEEPER_CONNECT="192.168.64.8:2181,192.168.64.9:2181,192.168.64.10:2181" \
+-e KAFKA_BROKER_ID=2 \
+-e KAFKA_HEAP_OPTS="-Xms512M -Xmx1G" \
+confluentinc/cp-kafka:5.3.1
+
+Kafka Connect Source
+====================================================================================================================
+sudo docker run \
+--restart "on-failure" \
+--name=kafka-connect-source-1 \
+--net=host \
+-p 28082:28082 \
+-e CONNECT_BOOTSTRAP_SERVERS="192.168.64.5:9092,192.168.64.6:9093,192.168.64.7:9094" \
+-e CONNECT_REST_PORT=28082 \
+-e CONNECT_GROUP_ID="quickstart" \
+-e CONNECT_CONFIG_STORAGE_TOPIC="quickstart-config" \
+-e CONNECT_OFFSET_STORAGE_TOPIC="quickstart-offsets" \
+-e CONNECT_STATUS_STORAGE_TOPIC="quickstart-status" \
+-e CONNECT_KEY_CONVERTER="org.apache.kafka.connect.json.JsonConverter" \
+-e CONNECT_VALUE_CONVERTER="org.apache.kafka.connect.json.JsonConverter" \
+-e CONNECT_INTERNAL_KEY_CONVERTER="org.apache.kafka.connect.json.JsonConverter" \
+-e CONNECT_INTERNAL_VALUE_CONVERTER="org.apache.kafka.connect.json.JsonConverter" \
+-e CONNECT_REST_ADVERTISED_HOST_NAME="192.168.64.11" \
+-e CONNECT_PLUGIN_PATH=/usr/share/java \
+-e CONNECT_KAFKA_HEAP_OPTS="-Xms512M -Xmx2G" \
+confluentinc/cp-kafka-connect:5.4.0
+
+Kafka Connect Sink
+=============================================================================================
+sudo docker run \
+--restart "on-failure" \
+--name=kafka-connect-sink-1 \
+--net=host \
+-p 28082:28082 \
+-e CONNECT_BOOTSTRAP_SERVERS="192.168.64.5:9092,192.168.64.6:9093,192.168.64.7:9094" \
+-e CONNECT_REST_PORT=28082 \
+-e CONNECT_GROUP_ID="quickstart" \
+-e CONNECT_CONFIG_STORAGE_TOPIC="quickstart-config" \
+-e CONNECT_OFFSET_STORAGE_TOPIC="quickstart-offsets" \
+-e CONNECT_STATUS_STORAGE_TOPIC="quickstart-status" \
+-e CONNECT_KEY_CONVERTER="org.apache.kafka.connect.json.JsonConverter" \
+-e CONNECT_VALUE_CONVERTER="org.apache.kafka.connect.json.JsonConverter" \
+-e CONNECT_INTERNAL_KEY_CONVERTER="org.apache.kafka.connect.json.JsonConverter" \
+-e CONNECT_INTERNAL_VALUE_CONVERTER="org.apache.kafka.connect.json.JsonConverter" \
+-e CONNECT_REST_ADVERTISED_HOST_NAME="192.168.64.12" \
+-e CONNECT_PLUGIN_PATH=/usr/share/java \
+-e CONNECT_KAFKA_HEAP_OPTS="-Xms512M -Xmx2G" \
+confluentinc/cp-kafka-connect:5.4.0
+
+Confluent Schema Registry
+======================================================================================================
+sudo docker run \
+--restart "on-failure" \
+--net=host \
+--name=schema-registry \
+-e SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL="192.168.64.8:2181,192.168.64.9:2181,192.168.64.10:2181" \
+-e SCHEMA_REGISTRY_HOST_NAME="192.168.64.13" \
+-e SCHEMA_REGISTRY_LISTENERS=http://192.168.64.13:8081 \
+-e SCHEMA_REGISTRY_DEBUG=true \
+confluentinc/cp-schema-registry:5.4.0
+
+Kafka Rest Proxy
+======================================================================================================
+sudo docker run \
+--restart "on-failure" \
+--net=host \
+--name=kafka-rest-proxy \
+-e KAFKA_REST_ZOOKEEPER_CONNECT="192.168.64.8:2181,192.168.64.9:2181,192.168.64.10:2181" \
+-e KAFKA_REST_LISTENERS=http://192.168.64.14:8082 \
+-e KAFKA_REST_SCHEMA_REGISTRY_URL=http://192.168.64.13:8081 \
+-e KAFKA_REST_HOST_NAME="192.168.64.14" \
+confluentinc/cp-kafka-rest:5.4.0

@@ -1,0 +1,38 @@
+Kafka Cluster VM IP List
+
+Brokers
+============================
+kafka-broker-1: 192.168.64.5
+kafka-broker-2: 192.168.64.6
+kafka-broker-3: 192.168.64.7
+============================
+
+Zookeeper
+================================
+kafka-zookeeper-1: 192.168.64.8 
+kafka-zookeeper-2: 192.168.64.9 
+kafka-zookeeper-3: 192.168.64.10
+================================
+
+Kafka Connect
+=====================================
+kafka-connect-source-1: 192.168.64.11
+kafka-connect-sink-1  : 192.168.64.12
+=====================================
+
+Confluent Schema Registry
+========================================
+confluent-schema-registry: 192.168.64.13
+========================================
+
+Kafka Rest Proxy
+===============================
+kafka-rest-proxy: 192.168.64.14
+===============================
+
+Docker Swarm Manager Node
+==================================
+docker-swarm-master: 192.168.64.16
+==================================
+
+sudo docker swarm join --token SWMTKN-1-15wvznylzoshus9n13a9jn6mv93pr951jjtz7sgr27lewoo1ea-17e6odz7jr9uz3o0ovmpweumg 192.168.64.16:2377
