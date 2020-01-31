@@ -14,9 +14,9 @@ services:
       ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2889:3889 server.3=zoo3:2890:3890 # A list of all the zookeeper nodes in the cluster
       ZOOKEEPER_CLIENT_PORT: 2181
     ports:
-      - 2181:2181 # Zookeeper listner
-      - 3888:3888 # Quorum listening port
-      - 2888:2888 # Quorum listening port
+      - "2181:2181" # Zookeeper listner
+      - "3888:3888" # Quorum listening port
+      - "2888:2888" # Quorum listening port
 
   zoo2:
     image: zookeeper:3.4.9
@@ -31,9 +31,9 @@ services:
       ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2889:3889 server.3=zoo3:2890:3890 # A list of all the zookeeper nodes in the cluster
       ZOOKEEPER_CLIENT_PORT: 2182
     ports:
-      - 2182:2182 # Zookeeper listner
-      - 3889:3889 # Quorum listening port
-      - 2889:2889 # Quorum listening port
+      - "2182:2182" # Zookeeper listner
+      - "3889:3889" # Quorum listening port
+      - "2889:2889" # Quorum listening port
 
   zoo3:
     image: zookeeper:3.4.9
@@ -48,9 +48,9 @@ services:
       ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2889:3889 server.3=zoo3:2890:3890 # A list of all the zookeeper nodes in the cluster
       ZOOKEEPER_CLIENT_PORT: 2183
     ports:
-      - 2183:2183 # Zookeeper listner
-      - 3890:3890 # Quorum listening port
-      - 2890:2890 # Quorum listening port
+      - "2183:2183" # Zookeeper listner
+      - "3890:3890" # Quorum listening port
+      - "2890:2890" # Quorum listening port
 
   broker1:
     image: confluentinc/cp-kafka:5.3.1
@@ -70,7 +70,7 @@ services:
       KAFKA_BROKER_ID: 0
       KAFKA_HEAP_OPTS: -Xms512M -Xmx1G
     ports:
-      - 9092:9092 # Broker listner
+      - "9092:9092" # Broker listner
 
   broker2:
     image: confluentinc/cp-kafka:5.3.1
@@ -90,7 +90,7 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_HEAP_OPTS: -Xms512M -Xmx1G
     ports:
-      - 9093:9093 # Broker listner
+      - "9093:9093" # Broker listner
 
   broker3:
     image: confluentinc/cp-kafka:5.3.1
@@ -110,5 +110,5 @@ services:
       KAFKA_BROKER_ID: 2
       KAFKA_HEAP_OPTS: -Xms512M -Xmx1G
     ports:
-      - 9094:9094 # Broker listner
+      - "9094:9094" # Broker listner
 
