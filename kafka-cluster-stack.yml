@@ -9,7 +9,7 @@ services:
       placement:
         constraints:
           - node.hostname==kafka-zookeeper-1
-    restart: on-failure
+    restart: always
     environment:
       ZOO_MY_ID: 1 # The id for the zookeeper in the cluster
       ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888 # A list of all the zookeeper nodes in the cluster
@@ -36,7 +36,7 @@ services:
       placement:
         constraints:
           - node.hostname==kafka-zookeeper-2
-    restart: on-failure
+    restart: always
     environment:
       ZOO_MY_ID: 2 # The id for the zookeeper in the cluster
       ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888 # A list of all the zookeeper nodes in the cluster
@@ -63,7 +63,7 @@ services:
       placement:
         constraints:
           - node.hostname==kafka-zookeeper-3
-    restart: on-failure
+    restart: always
     environment:
       ZOO_MY_ID: 3 # The id for the zookeeper in the cluster
       ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888 # A list of all the zookeeper nodes in the cluster
@@ -94,7 +94,7 @@ services:
       placement:
         constraints:
           - node.hostname==kafka-broker-1
-    restart: on-failure
+    restart: always
     environment:
       KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://broker1:19092,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9092
       KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181
@@ -118,7 +118,7 @@ services:
       placement:
         constraints:
           - node.hostname==kafka-broker-2
-    restart: on-failure
+    restart: always
     environment:
       KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://broker2:19093,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9093
       KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181
@@ -142,7 +142,7 @@ services:
       placement:
         constraints:
           - node.hostname==kafka-broker-3
-    restart: on-failure
+    restart: always
     environment:
       KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://broker3:19094,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9094
       KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181
@@ -151,5 +151,39 @@ services:
     ports:
       - target: 9094
         published: 9094
+        protocol: tcp
+        mode: host
+
+    connectsource1:
+    image: confluentinc/cp-kafka-connect:5.4.0
+    hostname: connectsource1
+    depends_on:
+      - zoo1
+      - zoo2
+      - zoo3
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname==kafka-connect-source-1
+    restart: always
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: broker1:9092,broker2:9093,broker3:9094
+      CONNECT_REST_PORT: 28082
+      CONNECT_GROUP_ID: quickstart
+      CONNECT_CONFIG_STORAGE_TOPIC: quickstart-config
+      CONNECT_OFFSET_STORAGE_TOPIC: quickstart-offsets
+      CONNECT_STATUS_STORAGE_TOPIC: quickstart-status
+      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181
+      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_INTERNAL_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_REST_ADVERTISED_HOST_NAME: kafka-connect-source-1
+      CONNECT_PLUGIN_PATH: /usr/share/java
+      CONNECT_KAFKA_HEAP_OPTS: -Xms512M -Xmx2G
+    ports:
+      - target: 28082
+        published: 28082
         protocol: tcp
         mode: host
