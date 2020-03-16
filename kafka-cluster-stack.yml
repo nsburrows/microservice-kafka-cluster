@@ -156,11 +156,11 @@ services:
 
   connectsource1:
     image: confluentinc/cp-kafka-connect:5.4.0
-    hostname: connectsource1
+    hostname: connsource1
     depends_on:
-      - zoo1
-      - zoo2
-      - zoo3
+      - broker1
+      - broker2
+      - broker3
     deploy:
       replicas: 1
       placement:
