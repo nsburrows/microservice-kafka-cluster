@@ -154,7 +154,7 @@ services:
         protocol: tcp
         mode: host
 
-    connectsource1:
+  connectsource1:
     image: confluentinc/cp-kafka-connect:5.4.0
     hostname: connectsource1
     depends_on:
